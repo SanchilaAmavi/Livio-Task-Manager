@@ -48,7 +48,6 @@ Ready to deploy online via Streamlit Cloud.
 
 Fully interactive, portfolio-ready, and suitable to showcase in job applications or personal projects.
 
-Screenshots / Demo
 
 
 
