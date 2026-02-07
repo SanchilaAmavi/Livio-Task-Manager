@@ -1,40 +1,58 @@
-import os
+# modules/tasks.py
+
 import pandas as pd
+import os
 
-# Ensure data folder exists
-DATA_DIR = "data"
-if not os.path.exists(DATA_DIR):
-    os.makedirs(DATA_DIR)
+# ---------------------------
+# File path for tasks
+# ---------------------------
+TASK_FILE = os.path.join(os.path.dirname(__file__), "..", "data", "tasks.csv")
 
-TASK_FILE = os.path.join(DATA_DIR, "tasks.csv")
+# Ensure the data folder exists
+if not os.path.exists(os.path.dirname(TASK_FILE)):
+    os.makedirs(os.path.dirname(TASK_FILE))
 
-# Create CSV if it doesn't exist
+# Ensure the CSV file exists
 if not os.path.exists(TASK_FILE):
-    df = pd.DataFrame(columns=["Title", "Priority", "Deadline", "Status"])
-    df.to_csv(TASK_FILE, index=False)
-else:
-    df = pd.read_csv(TASK_FILE)
-
-# Add a task
-def add_task(title, priority, deadline, status="Pending"):
-    global df
-    new_task = {"Title": title, "Priority": priority, "Deadline": deadline, "Status": status}
-    df = pd.concat([df, pd.DataFrame([new_task])], ignore_index=True)
+    df = pd.DataFrame(columns=["Title", "Priority", "Status", "Deadline"])
     df.to_csv(TASK_FILE, index=False)
 
-# Update task status
-def update_task(index, status):
-    global df
-    df.loc[index, "Status"] = status
-    df.to_csv(TASK_FILE, index=False)
 
-# Delete task
-def delete_task(index):
-    global df
-    df = df.drop(index).reset_index(drop=True)
-    df.to_csv(TASK_FILE, index=False)
-
-# ✅ MUST BE AT THE BOTTOM
+# ---------------------------
+# View tasks
+# ---------------------------
 def view_tasks():
-    global df
+    """Return all tasks as a DataFrame"""
+    df = pd.read_csv(TASK_FILE)
     return df
+
+
+# ---------------------------
+# Add a new task
+# ---------------------------
+def add_task(title, priority, status, deadline):
+    """Add a new task to the CSV"""
+    df = pd.read_csv(TASK_FILE)
+    new_task = {"Title": title, "Priority": priority, "Status": status, "Deadline": deadline}
+    df = df.append(new_task, ignore_index=True)
+    df.to_csv(TASK_FILE, index=False)
+
+
+# ---------------------------
+# Update task status
+# ---------------------------
+def update_task(title, new_status):
+    """Update the status of a task"""
+    df = pd.read_csv(TASK_FILE)
+    df.loc[df["Title"] == title, "Status"] = new_status
+    df.to_csv(TASK_FILE, index=False)
+
+
+# ---------------------------
+# Delete a task
+# ---------------------------
+def delete_task(title):
+    """Delete a task from the CSV"""
+    df = pd.read_csv(TASK_FILE)
+    df = df[df["Title"] != title]
+    df.to_csv(TASK_FILE, index=False)
