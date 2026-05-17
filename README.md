@@ -28,12 +28,6 @@
 
 ## Usage
 
-1. Clone the repository:
-
-```bash
-git clone https://github.com/yourusername/Livio-Task-Manager.git
-Navigate to the project folder:
-
 cd Livio
 Install dependencies:
 
